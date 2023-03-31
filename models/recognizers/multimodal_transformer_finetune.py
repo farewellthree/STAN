@@ -83,10 +83,7 @@ class VisualTextFinetuneModelClip(BaseRecognizer):
             
             if self.interaction_head is not None:
                 sim_mt = self.interaction_head(text_out_with_mask, visual_cls, input_mask[:1], video_patch=visual_token)
-                if hasattr(self.interaction_head, 'reco2'):
-                    sim_mt = logit_scale * sim_mt
-                else:
-                    sim_mt = logit_scale * sim_mt.T
+                sim_mt = logit_scale * sim_mt.T
             else:
                 visual_cls = visual_cls / visual_cls.norm(dim=-1, keepdim=True)
                 text_mask_cls = text_mask_cls / text_mask_cls.norm(dim=-1, keepdim=True)
@@ -105,29 +102,11 @@ class VisualTextFinetuneModelClip(BaseRecognizer):
         if self.task == 'retrieval_ssl':
             retrieve_logits = None
             if self.interaction_head is not None:
-                parse_idx, parse_mask = None, None
-                if 'parse_idx' in kwargs:
-                    parse_idx = kwargs['parse_idx']
-                    parse_mask = kwargs['parse_mask']
-                retrieve_logits = self.interaction_head(text_out_with_mask, visual_cls, input_mask, video_patch=visual_token, parse_idx=parse_idx, parse_mask=parse_mask)
+                retrieve_logits = self.interaction_head(text_out_with_mask, visual_cls, input_mask)
             nce_loss = self.loss_func(visual_cls, text_mask_cls, retrieve_logits)
             losses['retrieval_nce_loss'] = nce_loss
         
         return losses
-
-
-    def forward_gradcam(self, imgs, token_ids=None, segment_ids=None,input_mask=None, **kwargs):
-        self.half()
-        imgs = imgs.half()
-        #token_ids = token_ids.half()
-        #input_mask = input_mask.half()
-        visual_token, visual_cls = self.extract_visual_feat(imgs)
-        text_out_with_mask, text_mask_cls = self.extract_text_feat(token_ids, input_mask)
-        visual_cls = visual_cls / visual_cls.norm(dim=-1, keepdim=True)
-        text_mask_cls = text_mask_cls / text_mask_cls.norm(dim=-1, keepdim=True)
-        
-        sim_mt = torch.matmul(visual_cls, text_mask_cls.transpose(0, 1))
-        return sim_mt
 
     @auto_fp16(apply_to=('imgs'))
     def forward_test(self, imgs, token_ids=None, segment_ids=None, input_mask=None, ans_ids=None, ans_mask=None, **kwargs):
@@ -151,10 +130,7 @@ class VisualTextFinetuneModelClip(BaseRecognizer):
             logit_scale = self.logit_scale
             if self.interaction_head is not None:
                 sim_mt = self.interaction_head(text_out_with_mask, visual_cls, input_mask[:1], video_patch=visual_token)
-                if hasattr(self.interaction_head, 'reco2'):
-                    sim_mt = logit_scale * sim_mt
-                else:
-                    sim_mt = logit_scale * sim_mt.T
+                sim_mt = logit_scale * sim_mt.T
             else:   
                 visual_cls = visual_cls / visual_cls.norm(dim=-1, keepdim=True)
                 text_mask_cls = text_mask_cls / text_mask_cls.norm(dim=-1, keepdim=True)
@@ -170,21 +146,9 @@ class VisualTextFinetuneModelClip(BaseRecognizer):
         
         # only use the multimodal transformer for  
         if self.separate_test:
-            # visual_emb = self.ssl_head.forward_vision(visual_token)
-            # text_emb = self.mlm_ssl_T_head(text_out_last_hidden_state[:, 0])
-            #visual_emb, text_emb = self.ssl_head(visual_token, text_out_last_hidden_state, input_mask, token_ids)
-            if isinstance(visual_cls, tuple):
-                visual_cls, head_cls = visual_cls
-                visual_cls = visual_cls + head_cls
-            
             if self.interaction_head is not None:
-                #input_mask = input_mask.reshape((-1, ) + input_mask.shape[2:])
-                #return visual_cls.mean(1), text_out_with_mask[torch.arange(text_out_with_mask.shape[0]), input_mask.argmin(dim=-1)-1]
-                if 'patch' in self.interaction_head.mode:
-                    return visual_token, text_out_with_mask
                 return visual_cls, text_out_with_mask
             return visual_cls, text_mask_cls
-
         else:
             raise NotImplementedError("not implement the finetune test method")
             

@@ -15,7 +15,7 @@ If you find the code useful for your research, please consider citing our paper:
 @article{liu2023revisiting,
   title={Revisiting Temporal Modeling for CLIP-based Image-to-Video Knowledge Transferring},
   author={Liu, Ruyang and Huang, Jingjia and Li, Ge and Feng, Jiashi and Wu, Xinglong and Li, Thomas H},
-  journal={arXiv preprint arXiv:2301.11116},
+  journal={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   year={2023}
 }
 ```
