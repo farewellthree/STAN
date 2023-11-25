@@ -7,7 +7,48 @@
 Official PyTorch implementation of the CVPR2023 paper ["Revisiting Temporal Modeling for CLIP-based Image-to-Video
 Knowledge Transferring"](https://arxiv.org/abs/2301.11116)
 
-All our codes are implemented based on MMaction2. We merely present the method module due to the data module is based on private I/O. The training pipeline will come soon.
+The original code is based on mmcv1.4. Due to all the data processing pipelines being built on private I/O, the training code cannot be open-sourced. Therefore, we have reproduced the results using mmcv2.0.
+
+## Getting Started
+### Installation
+
+Git clone our repository, creating a python environment and activate it via the following command
+
+```bash
+git clone https://github.com/farewellthree/STAN.git
+cd STAN
+conda create --name stan python=3.9
+conda activate stan
+bash install.sh
+```
+
+### Prepare Datasets
+You can follow [CLIP4clip](https://github.com/ArrowLuo/CLIP4Clip) for the acquisition of videos and annotation.
+
+Once the dataset is already, set the path in each config. Take stan-b/32 on MSRVTT for instance, set video path [here](https://github.com/farewellthree/STAN/blob/main/configs/exp/stan/stan_msrvtt_b32_hf.py#L25) at Line 25.
+
+Considering there might be multiple versions of annotations for the dataset, our code may not be compatible with your annotations. In such cases, you just need to modify the corresponding dataset class in [video_text_dataset.py](https://github.com/farewellthree/STAN/blob/main/mmaction/datasets/video_text_dataset.py), to output the paths of all videos along with their corresponding captions.
+
+## Training
+### STAN
+To train stan-b/32 on MSRVTT, run 
+```bash
+torchrun --nproc_per_node=8 --master_port=20001 tools/train.py configs/exp/stan/stan_msrvtt_b32_hf.py --launcher pytorch
+```
+The same principle applies to other datasets or models in terms of scale.
+
+### Mug-STAN
+To train mug-stan-b/32 on MSRVTT, run 
+```bash
+torchrun --nproc_per_node=8 --master_port=20001 tools/train.py configs/exp/stan/mugstan_msrvt_b32_hf.py --launcher pytorch
+```
+The same principle applies to other datasets or models in terms of scale.
+
+### Post-Pretraining
+To post-pretraining mug-stan-b/32 on Webvid10m, run 
+```bash
+torchrun --nproc_per_node=16 --master_port=20001 tools/train.py configs/exp/stan/mugstan_webvid10m_b32_pretrain.py --launcher pytorch
+```
 
 ## Citation
 If you find the code useful for your research, please consider citing our paper:
