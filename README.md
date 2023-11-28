@@ -1,11 +1,11 @@
-# STAN （CVPR2023）
+# Mug-STAN 
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-temporal-modeling-for-clip-based/video-retrieval-on-msr-vtt-1ka)](https://paperswithcode.com/sota/video-retrieval-on-msr-vtt-1ka?p=revisiting-temporal-modeling-for-clip-based)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-temporal-modeling-for-clip-based/video-retrieval-on-didemo)](https://paperswithcode.com/sota/video-retrieval-on-didemo?p=revisiting-temporal-modeling-for-clip-based)
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/revisiting-temporal-modeling-for-clip-based/video-retrieval-on-lsmdc)](https://paperswithcode.com/sota/video-retrieval-on-lsmdc?p=revisiting-temporal-modeling-for-clip-based)
 
-Official PyTorch implementation of the CVPR2023 paper ["Revisiting Temporal Modeling for CLIP-based Image-to-Video
-Knowledge Transferring"](https://arxiv.org/abs/2301.11116)
+Official PyTorch implementation of the paper ["Revisiting Temporal Modeling for CLIP-based Image-to-Video
+Knowledge Transferring"](https://openaccess.thecvf.com/content/CVPR2023/html/Liu_Revisiting_Temporal_Modeling_for_CLIP-Based_Image-to-Video_Knowledge_Transferring_CVPR_2023_paper.html) and ["Mug-STAN: Adapting Image-Language Pretrained Models for General Video Understanding"](https://arxiv.org/abs/2311.15075)
 
 The original code is based on mmcv1.4. Due to all the data processing pipelines being built on private I/O, the training code cannot be open-sourced. Therefore, we have reproduced the results using mmcv2.0.
 
@@ -17,7 +17,7 @@ Git clone our repository, creating a python environment and activate it via the 
 ```bash
 git clone https://github.com/farewellthree/STAN.git
 cd STAN
-conda create --name stan python=3.9
+conda create --name stan python=3.10
 conda activate stan
 bash install.sh
 ```
