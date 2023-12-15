@@ -91,5 +91,5 @@ class VideoDataset(BaseActionDataset):
                 label = int(label)
             if self.data_prefix['video'] is not None:
                 filename = osp.join(self.data_prefix['video'], filename)
-            data_list.append(dict(filename=filename, label=label))
+            data_list.append(dict(filename=filename, text="", label=label))
         return data_list
