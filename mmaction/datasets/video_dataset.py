@@ -62,8 +62,10 @@ class VideoDataset(BaseActionDataset):
                  modality: str = 'RGB',
                  test_mode: bool = False,
                  delimiter: str = ' ',
+                 dummy_text = True,
                  **kwargs) -> None:
         self.delimiter = delimiter
+        self.dummy_text = dummy_text
         super().__init__(
             ann_file,
             pipeline=pipeline,
@@ -91,5 +93,8 @@ class VideoDataset(BaseActionDataset):
                 label = int(label)
             if self.data_prefix['video'] is not None:
                 filename = osp.join(self.data_prefix['video'], filename)
-            data_list.append(dict(filename=filename, text="", label=label))
+            if not self.dummy_text:
+                data_list.append(dict(filename=filename, label=label))
+            else:
+                data_list.append(dict(filename=filename, text = "", label=label))
         return data_list
