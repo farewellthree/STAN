@@ -7,7 +7,7 @@ model = dict(
     text_encoder=dict(type='CLIPTextPretrained', pretrained_model=pretrained_model),
     to_float32=True,
     frozen_layers=False,    
-    class_path = 'configs/lists/hmdb51_labels.txt',
+    class_path = 'tools/data/hmdb51/label_map.txt',
     task="recognition",
     data_preprocessor=dict(
         type='MultiModalDataPreprocessor',
