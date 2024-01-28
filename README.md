@@ -9,6 +9,8 @@ Knowledge Transferring"](https://openaccess.thecvf.com/content/CVPR2023/html/Liu
 
 The original code is based on mmcv1.4. Due to all the data processing pipelines being built on private I/O, the training code cannot be open-sourced. Therefore, we have reproduced the results using mmcv2.0.
 
+Pretrained Weights: <a href='https://huggingface.co/farewellthree/Mug_STAN_Weight'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue'>
+
 ## Getting Started
 ### Installation
 
